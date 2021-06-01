@@ -1,0 +1,34 @@
+{
+  "name": "app-sync-masterclass",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Twitter Clone",
+  "main": "index.js",
+  "scripts": {
+    "sls": "sls",
+    "exportEnv": "sls export-env",
+    "integration-test": "jest --verbose ./__tests__/test_cases/integration"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrishty/app-sync-masterclass.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shrishty/app-sync-masterclass/issues"
+  },
+  "homepage": "https://github.com/shrishty/app-sync-masterclass#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "aws-sdk": "^2.918.0",
+    "chance": "^1.1.7",
+    "dotenv": "^8.6.0",
+    "jest": "^27.0.3",
+    "serverless": "2.4.0",
+    "serverless-appsync-plugin": "^1.11.3",
+    "serverless-export-env": "^1.4.4",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}
