@@ -5,7 +5,6 @@ const Chance = require('chance')
 const chance = new Chance()
 
 module.exports.handler = async (event) => {
-
     if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
         const name = event.request.userAttributes['name']
         const suffix = chance.string({length: 8, casing: 'upper', alpha: true, numeric: true})
