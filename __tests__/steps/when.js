@@ -186,6 +186,11 @@ const a_user_calls_tweet = async (user, text) => {
         tweet(text: $text) {
             id
             createdAt
+            profile {
+                id
+                name
+                screenName
+            }
             text
             replies
             likes
@@ -204,6 +209,77 @@ const a_user_calls_tweet = async (user, text) => {
     return newtweet
 }
 
+const a_user_calls_getTweet = async (user, userId, limit, nextToken) => {
+    const getTweets = `query getTweets($userId: ID!, $limit: Int!, $nextToken: String) {
+        getTweets(userId: $userId, limit: $limit, nextToken: $nextToken) {
+            nextToken
+            tweets {
+                id
+                createdAt
+                profile {
+                    id
+                    name
+                    screenName
+                }
+
+                ... on Tweet {
+                    text
+                    replies
+                    likes
+                    retweets
+                }
+            }
+        }
+    }`
+
+    const variables = {
+        userId,
+        limit,
+        nextToken
+    }
+
+    const data = await GraphQL(process.env.API_URL, getTweets, variables, user.accessToken)
+    const tweets = data.getTweets
+
+    console.log(`[${user.username}] - get tweet called`)
+    return tweets
+}
+
+const a_user_calls_getMyTimeline = async (user, limit, nextToken) => {
+    const getMyTimeline = `query getMyTimeline($limit: Int!, $nextToken: String) {
+        getMyTimeline(limit: $limit, nextToken: $nextToken) {
+            nextToken
+            tweets {
+                id
+                createdAt
+                profile {
+                    id
+                    name
+                    screenName
+                }
+
+                ... on Tweet {
+                    text
+                    replies
+                    likes
+                    retweets
+                }
+            }
+        }
+    }`
+
+    const variables = {
+        limit,
+        nextToken
+    }
+
+    const data = await GraphQL(process.env.API_URL, getMyTimeline, variables, user.accessToken)
+    const result = data.getMyTimeline
+
+    console.log(`[${user.username}] - fetched timeline`)
+    return result
+}
+
 module.exports = {
     we_invoke_confirmUserSignup,
     a_user_signs_up,
@@ -213,5 +289,7 @@ module.exports = {
     we_invoke_getImageUploadUrl,
     a_user_calls_getImageUploadUrl,
     we_invoke_tweet,
-    a_user_calls_tweet
+    a_user_calls_tweet,
+    a_user_calls_getTweet,
+    a_user_calls_getMyTimeline
 }
