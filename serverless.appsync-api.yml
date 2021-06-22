@@ -36,6 +36,10 @@ mappingTemplates:
     field: like
     dataSource: likeMutation
 
+  - type: Mutation
+    field: unlike
+    dataSource: unlikeMutation
+
   # NESTED FIELDS
   - type: Tweet
     field: profile
@@ -79,6 +83,23 @@ dataSources:
     name: likesTable
     config:
       tableName: !Ref LikesTable
+
+  - type: AMAZON_DYNAMODB
+    name: unlikeMutation
+    config:
+      tableName: !Ref LikesTable
+      iamRoleStatements:
+        - Effect: Allow
+          Action: dynamodb:DeleteItem
+          Resource: !GetAtt LikesTable.Arn
+
+        - Effect: Allow
+          Action: dynamodb:UpdateItem
+          Resource: !GetAtt UsersTable.Arn
+
+        - Effect: Allow
+          Action: dynamodb:UpdateItem
+          Resource: !GetAtt TweetsTable.Arn
 
   - type: AMAZON_DYNAMODB
     name: likeMutation
