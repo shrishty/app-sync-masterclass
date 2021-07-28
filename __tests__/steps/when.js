@@ -20,7 +20,7 @@ fragment myProfileFields on MyProfile {
   followersCount
   followingCount
   tweetsCount
-  likesCounts
+  likesCount
 }
 `
 
@@ -39,7 +39,7 @@ fragment otherProfileFields on OtherProfile {
   followersCount
   followingCount
   tweetsCount
-  likesCounts
+  likesCount
 }
 `
 

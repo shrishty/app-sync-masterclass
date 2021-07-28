@@ -2,7 +2,7 @@
   "version" : "2018-05-29",
   "operation" : "GetItem",
   "key" : {
-    "id" : $util.dynamodb.toDynamoDBJson($context.identity.username),
-    "tweetId": $util.dynamodb.toDynamoDBJson($context.source.id),
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.username),
+    "tweetId" : $util.dynamodb.toDynamoDBJson($context.source.id)
   }
 }

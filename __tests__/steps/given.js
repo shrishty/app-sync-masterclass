@@ -39,6 +39,7 @@ const an_appsync_context = (identity, args, result, source, info) => {
 
 const an_authenticated_user = async () => {
     const {name, email,  password} = a_random_user()
+    console.log("name", name, "email", email, "password", password)
     const cognito = new AWS.CognitoIdentityServiceProvider()
 
     const userPoolId = process.env.COGNITO_USER_POOL_ID
