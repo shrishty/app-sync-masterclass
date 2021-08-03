@@ -43,6 +43,12 @@ mappingTemplates:
     field: unlike
     dataSource: unlikeMutation
 
+  - type: Mutation
+    field: retweet
+    dataSource: retweetFunction
+    request: false
+    response: false
+
   # NESTED FIELDS
   - type: Tweet
     field: profile
@@ -79,6 +85,11 @@ dataSources:
     name: tweetFunction
     config:
       functionName: tweet
+  
+  - type: AWS_LAMBDA
+    name: retweetFunction
+    config:
+      functionName: retweet
 
   - type: AMAZON_DYNAMODB
     name: tweetsTable
