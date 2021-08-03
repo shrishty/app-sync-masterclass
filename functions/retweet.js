@@ -2,7 +2,7 @@ const DynamoDB = require('aws-sdk/clients/dynamodb')
 const DocumentClient = new DynamoDB.DocumentClient()
 const ulid = require('ulid')
 const { TweetTypes } = require('../lib/constants')
-const { USERS_TABLE, TWEETS_TABLE, TIMELINES_TABLE, RETWEEET_TABLE } = process.env
+const { USERS_TABLE, TWEETS_TABLE, TIMELINES_TABLE, RETWEETS_TABLE } = process.env
 
 module.exports.handler = async (event) => {
     const { tweetId } = event.arguments
@@ -64,7 +64,7 @@ module.exports.handler = async (event) => {
             Update: {
                 TableName: TWEETS_TABLE,
                 Key: {
-                    id: tweet
+                    id: tweetId
                 },
                 UpdateExpression: 'ADD retweets :one',
                 ExpressionAttributeValues: {
