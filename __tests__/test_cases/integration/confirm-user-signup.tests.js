@@ -10,7 +10,7 @@ describe('When Confirm User Signup runs', () => {
 
         await when.we_invoke_confirmUserSignup(username, name, email)
 
-        const dbuser = await then.user_exist_in_UsersTable(username)
+        const dbuser = await then.user_exists_in_UsersTable(username)
         expect(dbuser).toMatchObject({
             id: username,
             name,
