@@ -1,8 +1,7 @@
-
 {
   "version" : "2018-05-29",
   "operation" : "GetItem",
   "key" : {
-    "id" : $util.dynamodb.toDynamoDBJson($context.source.creator)
+    "id" : $util.dynamodb.toDynamoDBJson($context.source.retweetOf)
   }
 }

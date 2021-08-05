@@ -66,7 +66,23 @@ fragment tweetFields on Tweet {
   replies
   likes
   retweets
+  retweeted
   liked
+}
+`
+
+const retweetFragment = `
+fragment retweetFields on Retweet {
+  id
+  profile {
+    ... iProfileFields
+  }
+  createdAt
+  retweetOf {
+    ... on Tweet {
+      ... tweetFields
+    }
+  }
 }
 `
 
@@ -75,6 +91,10 @@ fragment iTweetFields on ITweet {
   ... on Tweet {
     ... tweetFields
   }
+
+  ... on Retweet {
+    ... retweetFields
+  }
 }
 `
 
@@ -82,6 +102,7 @@ registerFragment('myProfileFields', myProfileFragment)
 registerFragment('otherProfileFields', otherProfileFragment)
 registerFragment('iProfileFields', iProfileFragment)
 registerFragment('tweetFields', tweetFragment)
+registerFragment('retweetFields', retweetFragment)
 registerFragment('iTweetFields', iTweetFragment)
 
 const we_invoke_confirmUserSignup = async (username, name, email) => {
@@ -205,6 +226,7 @@ const a_user_calls_getMyProfile = async (user) => {
   const getMyProfile = `query getMyProfile {
     getMyProfile {
       ... myProfileFields
+
       tweets {
         nextToken
         tweets {
@@ -226,6 +248,7 @@ const a_user_calls_editMyProfile = async (user, input) => {
   const editMyProfile = `mutation editMyProfile($input: ProfileInput!) {
     editMyProfile(newProfile: $input) {
       ... myProfileFields
+
       tweets {
         nextToken
         tweets {
@@ -266,16 +289,7 @@ const a_user_calls_getImageUploadUrl = async (user, extension, contentType) => {
 const a_user_calls_tweet = async (user, text) => {
   const tweet = `mutation tweet($text: String!) {
     tweet(text: $text) {
-      id
-      profile {
-        ... iProfileFields
-      }
-      createdAt
-      text
-      replies
-      likes
-      retweets
-      liked
+      ... tweetFields
     }
   }`
   const variables = {
@@ -390,13 +404,29 @@ const a_user_calls_getLikes = async (user, userId, limit, nextToken) => {
   return result
 }
 
+const a_user_calls_retweet = async (user, tweetId) => {
+  const retweet = `mutation retweet($tweetId: ID!) {
+    retweet(tweetId: $tweetId)
+  }`
+  const variables = {
+    tweetId
+  }
+
+  const data = await GraphQL(process.env.API_URL, retweet, variables, user.accessToken)
+  const result = data.retweet
+
+  console.log(`[${user.username}] - retweeted tweet [${tweetId}]`)
+
+  return result
+}
+
 module.exports = {
   we_invoke_confirmUserSignup,
   we_invoke_getImageUploadUrl,
   we_invoke_tweet,
-  we_invoke_an_appsync_template,
   we_invoke_retweet,
   a_user_signs_up,
+  we_invoke_an_appsync_template,
   a_user_calls_getMyProfile,
   a_user_calls_editMyProfile,
   a_user_calls_getImageUploadUrl,
@@ -405,5 +435,6 @@ module.exports = {
   a_user_calls_getMyTimeline,
   a_user_calls_like,
   a_user_calls_unlike,
-  a_user_calls_getLikes
+  a_user_calls_getLikes,
+  a_user_calls_retweet,
 }
