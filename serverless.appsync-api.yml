@@ -55,6 +55,12 @@ mappingTemplates:
     request: false
     response: false
 
+  - type: Reply
+    field: reply
+    dataSource: replyFunction
+    request: false
+    response: false
+
   # NESTED FIELDS
   - type: Tweet
     field: profile
@@ -112,6 +118,11 @@ dataSources:
     name: unretweetFunction
     config:
       functionName: unretweet
+
+  - type: AWS_LAMBDA
+    name: replyFunction
+    config:
+      functionName: reply
 
   - type: AMAZON_DYNAMODB
     name: tweetsTable
