@@ -40,7 +40,7 @@ describe('Given an authenticated user', () => {
         expect(tweets.length).toEqual(1)
         expect(tweets[0]).toEqual(tweet)
       })
-  
+
       it('He cannot ask for more than 25 tweets in a page', async () => {
         await expect(when.a_user_calls_getTweets(userA, userA.username, 26))
           .rejects
@@ -63,7 +63,7 @@ describe('Given an authenticated user', () => {
         expect(tweets.length).toEqual(1)
         expect(tweets[0]).toEqual(tweet)
       })
-  
+
       it('He cannot ask for more than 25 tweets in a page', async () => {
         await expect(when.a_user_calls_getMyTimeline(userA, 26))
           .rejects
@@ -99,7 +99,7 @@ describe('Given an authenticated user', () => {
 
       it('Should be able to see this tweet when he calls getLikes', async () => {
         const { tweets, nextToken } = await when.a_user_calls_getLikes(userA, userA.username, 25)
-        
+
         expect(nextToken).toBeNull()
         expect(tweets).toHaveLength(1)
         expect(tweets[0]).toMatchObject({
@@ -136,7 +136,7 @@ describe('Given an authenticated user', () => {
 
       it('Should not see this tweet when he calls getLikes anymore', async () => {
         const { tweets, nextToken } = await when.a_user_calls_getLikes(userA, userA.username, 25)
-        
+
         expect(nextToken).toBeNull()
         expect(tweets).toHaveLength(0)
       })
@@ -192,6 +192,26 @@ describe('Given an authenticated user', () => {
           }
         })
       })
+
+      describe('When he unretweets the tweet', () => {
+        beforeAll(async () => {
+          await when.a_user_calls_unretweet(userA, tweet.id)
+        })
+
+        it("Should not see the retweet when he calls getTweets anymore", async () => {
+          const { tweets } = await when.a_user_calls_getTweets(userA, userA.username, 25)
+          expect(tweets).toHaveLength(1)
+          expect(tweets[0]).toMatchObject({
+            ...tweet,
+            retweets: 0,
+            retweeted: false,
+            profile: {
+              id: userA.username,
+              tweetsCount: 1
+            }
+          })
+        })
+      })
     })
 
     describe('Given another user, user B, sends a tweet', () => {
@@ -209,12 +229,12 @@ describe('Given an authenticated user', () => {
 
         it('Should see the retweet when he calls getTweets', async () => {
           const { tweets } = await when.a_user_calls_getTweets(userA, userA.username, 25)
-  
-          expect(tweets).toHaveLength(3)
+
+          expect(tweets).toHaveLength(2)
           expect(tweets[0]).toMatchObject({
             profile: {
               id: userA.username,
-              tweetsCount: 3
+              tweetsCount: 2
             },
             retweetOf: {
               ...anotherTweet,
@@ -223,15 +243,15 @@ describe('Given an authenticated user', () => {
             }
           })
         })
-  
+
         it('Should see the retweet when he calls getMyTimeline', async () => {
           const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25)
-  
+
           expect(tweets).toHaveLength(2)
           expect(tweets[0]).toMatchObject({
             profile: {
               id: userA.username,
-              tweetsCount: 3
+              tweetsCount: 2
             },
             retweetOf: {
               ...anotherTweet,
@@ -239,6 +259,40 @@ describe('Given an authenticated user', () => {
               retweeted: true
             }
           })
+        })
+
+        describe("When userA unretweets userB's tweet", () => {
+          beforeAll(async () => {
+            await when.a_user_calls_unretweet(userA, anotherTweet.id)
+          })
+
+          it("UserA should not see the retweet when he calls getTweets anymore", async () => {
+            const { tweets } = await when.a_user_calls_getTweets(userA, userA.username, 25)
+            expect(tweets).toHaveLength(1)
+            expect(tweets[0]).toMatchObject({
+              ...tweet,
+              retweets: 0,
+              retweeted: false,
+              profile: {
+                id: userA.username,
+                tweetsCount: 1
+              }
+            })
+          })
+
+          it("UserA should not see the retweet when he calls getMyTimeline anymore", async () => {
+            const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25)
+
+            expect(tweets).toHaveLength(1)
+            expect(tweets[0]).toMatchObject({
+              ...tweet,
+              profile: {
+                id: userA.username,
+                tweetsCount: 1
+              }
+            })
+          })
+
         })
       })
     })

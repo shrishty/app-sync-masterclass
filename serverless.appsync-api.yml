@@ -111,7 +111,7 @@ dataSources:
   - type: AWS_LAMBDA
     name: unretweetFunction
     config:
-      functionName: runetweet
+      functionName: unretweet
 
   - type: AMAZON_DYNAMODB
     name: tweetsTable

@@ -11,7 +11,7 @@ describe('Given an authenticated user retweeted another user"s tweet a tweet', (
     beforeAll(async () => {
         userA = await given.an_authenticated_user()
         userB = await given.an_authenticated_user()
-        tweet = await when.we_invoke_tweet(userB.username, "txt")
+        tweet = await when.we_invoke_tweet(userB.username, text)
         await when.we_invoke_retweet(userA.username, tweet.id)
     })
 
@@ -40,8 +40,7 @@ describe('Given an authenticated user retweeted another user"s tweet a tweet', (
         })
 
         it('removes the retweet from the timelines table', async () => {
-            const tweets = await then.there_are_N_tweets_in_TimelinesTable(userA.username, 1)
-            expect(tweets[0].tweetId).toEqual(tweet.id)
+            await then.there_are_N_tweets_in_TimelinesTable(userA.username, 0)
         })
     })
 })

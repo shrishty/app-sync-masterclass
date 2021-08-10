@@ -43,13 +43,13 @@ module.exports.handler = async (event) => {
                 Key: {
                     id: retweet.id
                 },
-                ConditionExpression: 'attribute_exist(id)'
+                ConditionExpression: 'attribute_exists(id)'
             },
         },
         {
             Delete: {
                 TableName: RETWEETS_TABLE,
-                Delete: {
+                Key: {
                     userId: username,
                     tweetId,
                 },
@@ -91,7 +91,7 @@ module.exports.handler = async (event) => {
                 TableName: TIMELINES_TABLE,
                 Key: {
                     userId: username,
-                    tweetId: id
+                    tweetId: retweet.id
                 }
             }
         })
