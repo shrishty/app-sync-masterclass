@@ -55,7 +55,7 @@ mappingTemplates:
     request: false
     response: false
 
-  - type: Reply
+  - type: Mutation
     field: reply
     dataSource: replyFunction
     request: false

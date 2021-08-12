@@ -7,17 +7,20 @@ const { getTweetById } = require('../lib/tweets')
 const _ = require('lodash')
 
 module.exports.handler = async (event) => {
+    console.log('Events******', event)
     const { tweetId, text } = event.arguments
     const { username } = event.identity
     const id = ulid.ulid()
     const timestamp = new Date().toJSON()
 
-    const tweet = getTweetById(tweetId)
+    const tweet = await getTweetById(tweetId)
     if (!tweet) {
         throw new Error('Tweet is not found')
     }
 
     const inReplyToUserIds = await getUserIdsToReplyTo(tweet)
+
+    console.log('inReplyToUserIds', inReplyToUserIds, tweet)
 
     const newTweet = {
         __typename: TweetTypes.REPLY,
