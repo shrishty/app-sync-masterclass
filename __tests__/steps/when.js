@@ -206,9 +206,12 @@ const we_invoke_reply = async (username, tweetId, text) => {
       username
     },
     arguments: {
-      tweetId
+      tweetId,
+      text 
     }
   }
+
+  console.log("Event^^^^", event);
 
   return await handler(event, context)
 }

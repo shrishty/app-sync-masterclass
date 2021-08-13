@@ -94,6 +94,8 @@ const reply_exists_in_TweetsTable = async (userId, tweetId) => {
 
     const reply = _.get(resp, 'Items.0')
 
+    console.log("=========== reply", reply.inReplyToUserIds)
+
     expect(reply).toBeTruthy()
 
     return reply
