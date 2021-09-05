@@ -87,7 +87,7 @@ fragment retweetFields on Retweet {
 `
 
 const replyFragment = `
-fragment ReplyFields on Reply {
+fragment replyFields on Reply {
   id
   profile {
     ... iProfileFields
@@ -392,7 +392,7 @@ const a_user_calls_getTweets = async (user, userId, limit, nextToken) => {
   const data = await GraphQL(process.env.API_URL, getTweets, variables, user.accessToken)
   const result = data.getTweets
 
-  console.log(`[${user.username}] - posted new tweet`)
+  console.log(`[${user.username}] - posted new tweet`, result)
 
   return result
 }
@@ -414,7 +414,7 @@ const a_user_calls_getMyTimeline = async (user, limit, nextToken) => {
   const data = await GraphQL(process.env.API_URL, getMyTimeline, variables, user.accessToken)
   const result = data.getMyTimeline
 
-  console.log(`[${user.username}] - fetched timeline`)
+  console.log(`[${user.username}] - fetched timeline`, result)
 
   return result
 }
@@ -476,7 +476,9 @@ const a_user_calls_getLikes = async (user, userId, limit, nextToken) => {
 
 const a_user_calls_retweet = async (user, tweetId) => {
   const retweet = `mutation retweet($tweetId: ID!) {
-    retweet(tweetId: $tweetId)
+    retweet(tweetId: $tweetId) {
+      ... retweetFields
+    }
   }`
   const variables = {
     tweetId
@@ -506,7 +508,7 @@ const a_user_calls_unretweet = async (user, tweetId) => {
   return result
 }
 
-const a_user_calls_reply = async (user, tweetId) => {
+const a_user_calls_reply = async (user, tweetId, text) => {
   const reply = `mutation reply($tweetId: ID!, $text: String!) {
     reply(tweetId: $tweetId, text: $text) {
       ... replyFields
