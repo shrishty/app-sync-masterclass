@@ -16,7 +16,7 @@ describe('Reply.inReplyToUsers.request template', () => {
         ]
         const context = given.an_appsync_context({ username }, {}, {}, { inReplyToUserIds }, info)
         const result = when.we_invoke_an_appsync_template(templatePath, context)
- 
+
         expect(result).toEqual({
             "version": "2018-05-29",
             "operation": "BatchGetItem",

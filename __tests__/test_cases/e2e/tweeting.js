@@ -1,6 +1,5 @@
 require('dotenv').config()
 const given = require('../../steps/given')
-const then = require('../../steps/then')
 const when = require('../../steps/when')
 const chance = require('chance').Chance()
 
