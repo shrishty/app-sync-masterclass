@@ -128,6 +128,10 @@ fragment iTweetFields on ITweet {
   ... on Retweet {
     ... retweetFields
   }
+
+  ... on Reply {
+    ... replyFields
+  }
 }
 `
 
@@ -392,7 +396,7 @@ const a_user_calls_getTweets = async (user, userId, limit, nextToken) => {
   const data = await GraphQL(process.env.API_URL, getTweets, variables, user.accessToken)
   const result = data.getTweets
 
-  console.log(`[${user.username}] - posted new tweet`, result)
+  console.log(`[${user.username}] - get tweets`, result)
 
   return result
 }
@@ -522,7 +526,7 @@ const a_user_calls_reply = async (user, tweetId, text) => {
   const data = await GraphQL(process.env.API_URL, reply, variables, user.accessToken)
   const result = data.reply
 
-  console.log(`[${user.username}] - replyed tweet [${tweetId}]`)
+  console.log(`[${user.username}] - replyed tweet [${tweetId}]`, result)
 
   return result
 }

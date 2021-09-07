@@ -169,7 +169,7 @@ describe('Given an authenticated users, userA, userB and userC', () => {
                             id: userA.username,
                         }),
                         expect.objectContaining({
-                            id: userB.username,
+                            id: userC.username,
                         })
                     ])
                 })
