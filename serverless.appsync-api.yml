@@ -11,6 +11,9 @@ mappingTemplates:
     field: getMyProfile
     dataSource: usersTable
   - type: Query
+    field: getProfile
+    dataSource: usersTable
+  - type: Query
     field: getImageUploadUrl
     dataSource: getImageUploadUrlFunction
     request: false
@@ -60,6 +63,11 @@ mappingTemplates:
     dataSource: replyFunction
     request: false
     response: false
+
+  - type: Mutation
+    field: follow
+    dataSource: followMutation
+
 
   # NESTED FIELDS
   - type: Tweet
@@ -111,6 +119,12 @@ mappingTemplates:
     dataSource: tweetsTable
     request: MyProfile.tweets.request.vtl
     response: MyProfile.tweets.response.vtl
+  - type: OtherProfile
+    field: following
+    dataSource: relationshipsTable
+  - type: OtherProfile
+    field: followedBy
+    dataSource: relationshipsTable
 
 dataSources:
   - type: NONE
@@ -166,6 +180,11 @@ dataSources:
       tableName: !Ref RetweetsTable
 
   - type: AMAZON_DYNAMODB
+    name: relationshipsTable
+    config:
+      tableName: !Ref RelationshipsTable
+
+  - type: AMAZON_DYNAMODB
     name: unlikeMutation
     config:
       tableName: !Ref LikesTable
@@ -199,8 +218,21 @@ dataSources:
           Action: dynamodb:UpdateItem
           Resource: !GetAtt TweetsTable.Arn
 
+  - type: AMAZON_DYNAMODB
+    name: followMutation
+    config:
+      tableName: !Ref RelationshipsTable
+      iamRoleStatements:
+        - Effect: Allow
+          Action: dynamodb:PutItem
+          Resource: !GetAtt RelationshipsTable.Arn
+        - Effect: Allow
+          Action: dynamodb:UpdateItem
+          Resource: !GetAtt UsersTable.Arn
+
 
 substitutions:
   TweetsTable: !Ref TweetsTable
   LikesTable: !Ref LikesTable
   UsersTable: !Ref UsersTable
+  RelationshipsTable: !Ref RelationshipsTable
