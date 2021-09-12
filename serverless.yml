@@ -105,8 +105,8 @@ functions:
       TIMELINES_TABLE: !Ref TimelinesTable
     events:
       - stream:
-        type: dynamodb
-        arn: !GetAtt TweetsTable.StreamArn
+          type: dynamodb
+          arn: !GetAtt TweetsTable.StreamArn
     iamRoleStatements:
       - Effect: Allow
         Action: 
@@ -115,8 +115,7 @@ functions:
           - dynamodb:BatchWriteItem
         Resource: !GetAtt TimelinesTable.Arn
       - Effect: Allow
-        Action: 
-          - dynamodb:Query
+        Action: dynamodb:Query
         Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
 
   unretweet:
