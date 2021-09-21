@@ -58,6 +58,23 @@ describe('Given an authenticated users, userA, userB and userC', () => {
             })
         })
 
+        it("UserA should see userB in his list of following", async () => {
+            const { profiles } = await when.a_user_calls_getFollowing(userA, userA.username, 25)
+
+            expect(profiles).toHaveLength(1)
+            expect(profiles[0]).toMatchObject({
+                id: userB.username,
+                following: true,
+                followedBy: false
+            })
+        })
+
+        it("UserB should see userA in his list of following", async () => {
+            const { profiles } = await when.a_user_calls_getFollowing(userB, userB.username, 25)
+
+            expect(profiles).toHaveLength(0)
+        })
+
         it("Adds userB's tweets to userA's timeline", async () => {
             retry(async () => {
                 const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25)
